@@ -1,0 +1,76 @@
+---
+title: "SPL validation on the PBC cohort"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SPL validation on the PBC cohort}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette illustrates SPL scoring on the primary biliary cirrhosis cohort available in the `survival` package. The code below reproduces the model-by-kernel comparison table used in the real-data application.
+
+```{r setup, message=FALSE}
+library(splcr)
+library(survival)
+```
+
+## Data preparation
+
+The package assumes that follow-up time is recorded in **years**.
+
+
+```{r}
+data(pbc, package = "survival")
+
+pbc_data <- subset(pbc, !is.na(trt))
+pbc_data$status <- ifelse(pbc_data$status == 2, 1L, ifelse(pbc_data$status == 1, 2L, 0L))
+pbc_data$time <- as.numeric(pbc_data$time) / 365.25
+
+# Transformations consistent with the application code
+pbc_data$logbili <- log(pbc_data$bili)
+pbc_data$sex <- factor(pbc_data$sex)
+pbc_data$stage <- factor(pbc_data$stage)
+pbc_data$ascites <- factor(pbc_data$ascites)
+
+keep <- c("time","status","age","sex","stage","logbili","albumin","protime","ascites")
+pbc_data <- pbc_data[complete.cases(pbc_data[, keep]), keep]
+```
+
+## Candidate models
+
+```{r}
+models <- list(
+  "M1: Baseline Clinical"    = ~ age + sex + stage,
+  "M2: Core Biochemical"     = ~ logbili + albumin,
+  "M3: Extended Biochemical" = ~ logbili + albumin + protime + ascites,
+  "M4: Clinical + Core Bio"  = ~ age + sex + stage + logbili + albumin,
+  "M5: Full"                 = ~ age + sex + stage + logbili + albumin + protime + ascites
+)
+
+kernels <- c("uniform","triangular","epanechnikov","quartic")
+seed <- 20250101
+```
+
+## SPL-CR table
+
+```{r, eval=FALSE}
+tab_cr <- spl_compare(models, pbc_data, method = "cr",
+                      folds = 10, k_nn = 5,
+                      kernels = kernels,
+                      seed = seed)
+
+tab_cr
+```
+
+## SPL-FG table
+
+```{r, eval=FALSE}
+tab_fg <- spl_compare(models, pbc_data, method = "fg",
+                      folds = 10, k_nn = 5,
+                      kernels = kernels,
+                      seed = seed)
+
+tab_fg
+```
+
+The two chunks above are marked as `eval = FALSE` because they fit multiple models across several folds and kernels. To run them locally, set `eval = TRUE` and re-knit the vignette.

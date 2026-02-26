@@ -1,0 +1,32 @@
+Package: splcr
+Type: Package
+Title: Smoothed Predictive Likelihood for Competing Risks
+Version: 0.2.0
+Authors@R: c(
+    person("Hao", "Chen", role = c("aut", "cre"),
+           email = "hao.chen@sydney.edu.au"),
+    person("Clara", "Grazian", role = "aut")
+  )
+Description: Likelihood-based validation for competing-risks prediction models
+    via post-hoc k-nearest-neighbour kernel smoothing of stepwise baseline
+    components from cause-specific Cox and Fine-Gray models. Provides cross-
+    validated smoothed predictive log-scores and delete-one-fold jackknife
+    standard errors.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+SystemRequirements: C++17
+Imports:
+    stats,
+    utils,
+    survival,
+    riskRegression,
+    prodlim,
+    Rcpp
+Suggests:
+    knitr,
+    rmarkdown
+LinkingTo:
+    Rcpp,
+    RcppArmadillo
+VignetteBuilder: knitr

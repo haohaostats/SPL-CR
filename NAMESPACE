@@ -1,0 +1,8 @@
+useDynLib(splcr, .registration = TRUE)
+importFrom(Rcpp, evalCpp)
+
+export(spl_cr)
+export(spl_fg)
+export(spl_compare)
+
+S3method(print, splcr_result)
