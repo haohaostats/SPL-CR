@@ -83,8 +83,6 @@ Core dependencies include:
 - `Rcpp`
 - `RcppArmadillo`
 
-(Additional packages may be used in examples and manuscript replication scripts.)
-
 ---
 
 ## 🚀 Quick start (PBC example)
@@ -166,6 +164,14 @@ tab_fg <- spl_compare(
   k_nn    = 5,
   seed    = 20250101
 )
+
+# Convert to manuscript-style wide tables (kernels as columns)
+tab_cr_wide <- spl_compare_wide(tab_cr)
+tab_fg_wide <- spl_compare_wide(tab_fg)
+
+# Pretty print
+print(tab_cr_wide)
+print(tab_fg_wide)
 ```
 
 ---
@@ -212,34 +218,13 @@ To reproduce manuscript-style results as closely as possible:
 │   └── ...
 ├── src/
 │   └── khs.cpp
-├── man/                # generated docs (if roxygenized)
+├── man/               
 ├── README.md
 └── ...
 ```
 
 ---
 
-## 📄 Manuscript / citation
-
-This package accompanies our work on smoothed predictive likelihood for competing-risks prediction model validation.
-
-If you use this package in research, please cite:
-
-> **Chen, H.** and **Grazian, C.**  
-> *Smoothed predictive likelihood for validating competing-risks prediction models under cause-specific and Fine--Gray regression*  
-> (manuscript / preprint details to be added)
-
-### BibTeX (placeholder)
-```bibtex
-@misc{chen_grazian_splcr,
-  title   = {Smoothed predictive likelihood for validating competing-risks prediction models under cause-specific and Fine--Gray regression},
-  author  = {Chen, Hao and Grazian, Clara},
-  year    = {2026},
-  note    = {R package: splcr; GitHub repository: haohaostats/SPL-CR}
-}
-```
-
----
 
 ## 📝 License
 
