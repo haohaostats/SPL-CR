@@ -26,7 +26,7 @@ It implements two cross-validated smoothed predictive likelihood scores:
 The package addresses a key technical issue in survival/competing-risks validation:
 
 > Standard Cox / Fine–Gray baseline estimators are step functions.  
-> For out-of-sample events occurring between training jump times, naive predictive densities can be zero, causing \(\log(0)\) failures in cross-validation.
+> For out-of-sample events occurring between training jump times, naive predictive densities can be zero, causing `log(0)` failures in cross-validation.
 
 `SPL-CR` resolves this by applying a **post-fit k-nearest-neighbour kernel smoother** to training-fold baseline components only, yielding finite and stable out-of-sample log-scores.
 
@@ -37,7 +37,7 @@ The package addresses a key technical issue in survival/competing-risks validati
 ### 1) SPL-CR (Cause-Specific Hazards path)
 - Fit one Cox model per cause on each training fold
 - Smooth baseline cumulative hazard jumps \( \Delta \widehat{\Lambda}_{0c}(t) \)
-- Evaluate out-of-fold predictive log-score under the cause-specific hazard representation
+- Evaluate out-of-fold predictive log-score under the cause-specific hazards representation
 
 ### 2) SPL-FG (Fine–Gray path)
 - Fit one Fine–Gray model per cause on each training fold
@@ -130,6 +130,22 @@ res_fg <- spl_fg(
 print(res_fg)
 ```
 
+**Example output (PBC cohort):**
+
+```text
+Smoothed Predictive Likelihood (SPL-CR)
+Kernel: epanechnikov  kNN: 5  folds: 10
+CV mean log-score (Lhat): -3.9810
+Jackknife SE: 0.0358
+95% CI: [-4.0619, -3.9000]
+
+Smoothed Predictive Likelihood (SPL-FG)
+Kernel: epanechnikov  kNN: 5  folds: 10
+CV mean log-score (Lhat): -3.7391
+Jackknife SE: 0.0389
+95% CI: [-3.8270, -3.6512]
+```
+
 ---
 
 ## 📊 Compare multiple model specifications
@@ -140,7 +156,9 @@ Use `spl_compare()` to compare candidate formulas across kernels under a shared 
 models <- list(
   "M1: Baseline Clinical"    = ~ age + sex + stage,
   "M2: Core Biochemical"     = ~ logbili + albumin,
-  "M3: Extended Biochemical" = ~ logbili + albumin + protime + ascites
+  "M3: Extended Biochemical" = ~ logbili + albumin + protime + ascites,
+  "M4: Clinical + Core Bio"  = ~ age + sex + stage + logbili + albumin,
+  "M5: Full"                 = ~ age + sex + stage + logbili + albumin + protime + ascites
 )
 
 # Compare under SPL-CR
@@ -174,6 +192,34 @@ print(tab_cr_wide)
 print(tab_fg_wide)
 ```
 
+**Example output (wide tables, `metric = Lhat`):**
+
+```text
+📊 SPL model comparison  •  metric = Lhat
+────────────────────────────────────────────────────────────────────────────
+Model                        Uniform   Triangular   Epanechnikov     Quartic
+────────────────────────────────────────────────────────────────────────────
+M1: Baseline Clinical        -4.6304      -4.6792        -4.6735     -4.6807
+M2: Core Biochemical       ★ -2.6720    ★ -2.7210      ★ -2.7155   ★ -2.7222
+M3: Extended Biochemical     -3.9374      -3.9865        -3.9810     -3.9876
+M4: Clinical + Core Bio      -3.1065      -3.1565        -3.1511     -3.1579
+M5: Full                     -4.0118      -4.0620        -4.0568     -4.0634
+────────────────────────────────────────────────────────────────────────────
+Note: ★ marks the highest value in each kernel column (larger is better).
+
+📊 SPL model comparison  •  metric = Lhat
+────────────────────────────────────────────────────────────────────────────
+Model                        Uniform   Triangular   Epanechnikov     Quartic
+────────────────────────────────────────────────────────────────────────────
+M1: Baseline Clinical        -4.1256      -4.1721        -4.1677     -4.1732
+M2: Core Biochemical         -4.3483      -4.4351        -4.4223     -4.4452
+M3: Extended Biochemical   ★ -3.6968    ★ -3.7459      ★ -3.7391   ★ -3.7545
+M4: Clinical + Core Bio      -3.8935      -3.9405        -3.9358     -3.9421
+M5: Full                     -4.1578      -4.2067        -4.1996     -4.2121
+────────────────────────────────────────────────────────────────────────────
+Note: ★ marks the highest value in each kernel column (larger is better).
+```
+
 ---
 
 ## ⚠️ Important notes (time unit & comparability)
@@ -202,11 +248,12 @@ The package implementation of `spl_fg()` uses a **common all-cause event-time gr
 │   ├── spl_cr.R
 │   ├── spl_fg.R
 │   ├── spl_compare.R
+│   ├── spl_compare_wide.R
 │   ├── utils.R
 │   └── ...
 ├── src/
 │   └── khs.cpp
-├── man/               
+├── man/
 ├── README.md
 └── ...
 ```
