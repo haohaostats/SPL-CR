@@ -192,19 +192,7 @@ The package implementation of `spl_fg()` uses a **common all-cause event-time gr
 
 ---
 
-## 🧪 Reproducibility tips
-
-To reproduce manuscript-style results as closely as possible:
-
-- Use the same preprocessing
-- Use **stratified 10-fold CV**
-- Fix random seed (e.g., `seed = 20250101`)
-- Use `k_nn = 5`
-- Keep time in the original unit used by the analysis script (e.g., days for PBC)
-
----
-
-## 📁 Repository structure (typical)
+## 📁 Repository structure
 
 ```text
 .
@@ -222,31 +210,6 @@ To reproduce manuscript-style results as closely as possible:
 ├── README.md
 └── ...
 ```
-
----
-
-
-## 📝 License
-
-Please add your preferred license (e.g., `MIT`, `GPL-3`) in the repository and `DESCRIPTION`.
-
-Example (MIT):
-- `LICENSE`
-- `LICENSE.md`
-
----
-
-## 🤝 Contributing / Issues
-
-Bug reports, reproducibility questions, and feature requests are welcome via:
-
-- **GitHub Issues**: <https://github.com/haohaostats/SPL-CR/issues>
-
-When reporting issues, please include:
-- session info (`sessionInfo()`)
-- package version
-- a minimal reproducible example
-- whether you used `time` in days/years/months
 
 ---
 
