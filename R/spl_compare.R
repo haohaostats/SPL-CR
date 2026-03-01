@@ -13,7 +13,7 @@
 #' @export
 spl_compare <- function(models,
                         data,
-                        method = c("cr", "fg"),
+                        method = c("csh", "fg"),
                         kernels = c("uniform","triangular","epanechnikov","quartic"),
                         ...) {
 
@@ -38,7 +38,7 @@ spl_compare <- function(models,
   for (mname in names(models)) {
     form <- models[[mname]]
     for (k in kernels) {
-      if (method == "cr") {
+      if (method == "csh") {
         out <- do.call(spl_csh, c(list(formula = form, data = data, kernel = k, fold_id = fold_id), dots))
       } else {
         out <- do.call(spl_fg, c(list(formula = form, data = data, kernel = k, fold_id = fold_id), dots))

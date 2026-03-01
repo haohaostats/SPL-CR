@@ -87,6 +87,9 @@ Core dependencies include:
 
 ## 🚀 Quick start (PBC example)
 
+This example utilizes the **Mayo Clinic Primary Biliary Cirrhosis (PBC)**. The dataset is accessed via the `survival` R package. 
+In the PBC cohort, we treated death and liver transplantation as the two competing causes. We recoded outcomes as $\delta=0$ for censoring, $\delta=1$ for death, and $\delta=2$ for transplantation
+
 ```r
 library(splcr)
 library(survival)
@@ -133,7 +136,7 @@ print(res_fg)
 **Example output (PBC cohort):**
 
 ```text
-Smoothed Predictive Likelihood (SPL-CR)
+Smoothed Predictive Likelihood (SPL-CSH)
 Kernel: epanechnikov  kNN: 5  folds: 10
 CV mean log-score (Lhat): -3.9810
 Jackknife SE: 0.0358
@@ -161,11 +164,11 @@ models <- list(
   "M5: Full"                 = ~ age + sex + stage + logbili + albumin + protime + ascites
 )
 
-# Compare under SPL-CR
+# Compare under SPL-CSH
 tab_csh <- spl_compare(
   models  = models,
   data    = pbc_data,
-  method  = "cr",
+  method  = "csh",
   kernels = c("uniform", "triangular", "epanechnikov", "quartic"),
   folds   = 10,
   k_nn    = 5,
@@ -195,7 +198,7 @@ print(tab_fg_wide)
 **Example output (wide tables, `metric = Lhat`):**
 
 ```text
-📊 SPL model comparison  •  metric = Lhat
+📊 SPL-CSH model comparison  •  metric = Lhat
 ────────────────────────────────────────────────────────────────────────────
 Model                        Uniform   Triangular   Epanechnikov     Quartic
 ────────────────────────────────────────────────────────────────────────────
@@ -207,7 +210,7 @@ M5: Full                     -4.0118      -4.0620        -4.0568     -4.0634
 ────────────────────────────────────────────────────────────────────────────
 Note: ★ marks the highest value in each kernel column (larger is better).
 
-📊 SPL model comparison  •  metric = Lhat
+📊 SPL-FG model comparison  •  metric = Lhat
 ────────────────────────────────────────────────────────────────────────────
 Model                        Uniform   Triangular   Epanechnikov     Quartic
 ────────────────────────────────────────────────────────────────────────────
