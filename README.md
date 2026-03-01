@@ -20,7 +20,7 @@
 
 It implements two cross-validated smoothed predictive likelihood scores:
 
-- **SPL-CR**: for **cause-specific hazards (CSH)** models (Cox-type per cause)
+- **SPL-CSH**: for **cause-specific hazards (CSH)** models (Cox-type per cause)
 - **SPL-FG**: for **Fine–Gray (FG)** subdistribution hazard models
 
 The package addresses a key technical issue in survival/competing-risks validation:
@@ -34,7 +34,7 @@ The package addresses a key technical issue in survival/competing-risks validati
 
 ## 🔬 Methods implemented
 
-### 1) SPL-CR (Cause-Specific Hazards path)
+### 1) SPL-CSH (Cause-Specific Hazards path)
 - Fit one Cox model per cause on each training fold
 - Smooth baseline cumulative hazard jumps \( \Delta \widehat{\Lambda}_{0c}(t) \)
 - Evaluate out-of-fold predictive log-score under the cause-specific hazards representation
