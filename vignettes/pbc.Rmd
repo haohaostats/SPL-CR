@@ -51,15 +51,15 @@ kernels <- c("uniform","triangular","epanechnikov","quartic")
 seed <- 20250101
 ```
 
-## SPL-CR table
+## SPL-CSH table
 
 ```{r, eval=FALSE}
-tab_cr <- spl_compare(models, pbc_data, method = "cr",
+tab_csh <- spl_compare(models, pbc_data, method = "csh",
                       folds = 10, k_nn = 5,
                       kernels = kernels,
                       seed = seed)
 
-tab_cr
+tab_csh
 ```
 
 ## SPL-FG table

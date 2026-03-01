@@ -7,7 +7,7 @@
 spl_compare(
   models,
   data,
-  method = c("cr", "fg"),
+  method = c("csh", "fg"),
   kernels = c("uniform", "triangular", "epanechnikov", "quartic"),
   ...
 )
@@ -17,16 +17,16 @@ spl_compare(
 
 \item{data}{A data.frame with time and status columns.}
 
-\item{method}{Either \code{"cr"} or \code{"fg"}.}
+\item{method}{Either \code{"csh"} or \code{"fg"}.}
 
 \item{kernels}{Character vector of kernels.}
 
-\item{...}{Passed to \code{spl_cr()} or \code{spl_fg()}.}
+\item{...}{Passed to \code{spl_csh()} or \code{spl_fg()}.}
 }
 \value{
 A data.frame with columns: model, kernel, Lhat, se_L.
 }
 \description{
-Convenience wrapper to evaluate a list of formulas under SPL-CR or SPL-FG
+Convenience wrapper to evaluate a list of formulas under SPL-CSH or SPL-FG
 across one or more kernels using a shared fold assignment.
 }

@@ -107,8 +107,8 @@ pbc_data <- pbc_data[complete.cases(
   pbc_data[, c("time","status","logbili","albumin","protime","ascites","age","sex","stage")]
 ), ]
 
-# SPL-CR
-res_cr <- spl_cr(
+# SPL-CSH
+res_csh <- spl_csh(
   ~ logbili + albumin + protime + ascites,
   data   = pbc_data,
   folds  = 10,
@@ -116,7 +116,7 @@ res_cr <- spl_cr(
   kernel = "epanechnikov",
   seed   = 20250101
 )
-print(res_cr)
+print(res_csh)
 
 # SPL-FG
 res_fg <- spl_fg(
@@ -162,7 +162,7 @@ models <- list(
 )
 
 # Compare under SPL-CR
-tab_cr <- spl_compare(
+tab_csh <- spl_compare(
   models  = models,
   data    = pbc_data,
   method  = "cr",
@@ -184,11 +184,11 @@ tab_fg <- spl_compare(
 )
 
 # Convert to manuscript-style wide tables (kernels as columns)
-tab_cr_wide <- spl_compare_wide(tab_cr)
+tab_csh_wide <- spl_compare_wide(tab_csh)
 tab_fg_wide <- spl_compare_wide(tab_fg)
 
 # Pretty print
-print(tab_cr_wide)
+print(tab_csh_wide)
 print(tab_fg_wide)
 ```
 
@@ -225,7 +225,7 @@ Note: ★ marks the highest value in each kernel column (larger is better).
 ## ⚠️ Important notes (time unit & comparability)
 
 ### Time unit is **user-defined** (days / years / months all allowed)
-Both `spl_cr()` and `spl_fg()` are **time-unit agnostic**.
+Both `spl_csh()` and `spl_fg()` are **time-unit agnostic**.
 
 However:
 
@@ -245,7 +245,7 @@ The package implementation of `spl_fg()` uses a **common all-cause event-time gr
 ├── DESCRIPTION
 ├── NAMESPACE
 ├── R/
-│   ├── spl_cr.R
+│   ├── spl_csh.R
 │   ├── spl_fg.R
 │   ├── spl_compare.R
 │   ├── spl_compare_wide.R

@@ -3,7 +3,7 @@ print.splcr_result <- function(x, digits = 4, ...) {
   stopifnot(is.list(x))
   method <- if (!is.null(x$method)) x$method else "spl"
   title <- switch(method,
-                  spl_cr = "Smoothed Predictive Likelihood (SPL-CR)",
+                  spl_csh = "Smoothed Predictive Likelihood (SPL-CSH)",
                   spl_fg = "Smoothed Predictive Likelihood (SPL-FG)",
                   "Smoothed Predictive Likelihood")
   cat(title, "\n", sep = "")

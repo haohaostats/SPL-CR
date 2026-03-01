@@ -1,4 +1,4 @@
-#' Smoothed Predictive Likelihood for Cause-Specific Hazards (SPL-CR)
+#' Smoothed Predictive Likelihood for Cause-Specific Hazards (SPL-CSH)
 #'
 #' Computes cross-validated smoothed predictive log-scores under the cause-specific
 #' hazards representation by smoothing baseline cumulative hazard jumps on each
@@ -33,7 +33,7 @@
 #'
 #' @return An object of class \code{splcr_result}.
 #' @export
-spl_cr <- function(formula,
+spl_csh <- function(formula,
                    data,
                    time = "time",
                    status = "status",
@@ -160,7 +160,7 @@ spl_cr <- function(formula,
     if (isTRUE(return_scores)) scores_all[test_idx] <- sc
     
     if (isTRUE(verbose)) {
-      message(sprintf("[spl_cr] fold %d/%d: n_test=%d, mean=%.6f",
+      message(sprintf("[spl_csh] fold %d/%d: n_test=%d, mean=%.6f",
                       r, folds, length(test_idx), fold_means[r]))
     }
   }
@@ -168,7 +168,7 @@ spl_cr <- function(formula,
   jk <- .jk_se_from_foldmeans(fold_means, n_total = n)
   
   out <- list(
-    method = "spl_cr",
+    method = "spl_csh",
     kernel = kernel,
     k_nn = as.integer(k_nn),
     folds = as.integer(folds),

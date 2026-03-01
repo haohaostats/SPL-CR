@@ -12,7 +12,7 @@
 #'   \item For fair model comparison, use the same time unit across all competing models.
 #' }
 #'
-#' @inheritParams spl_cr
+#' @inheritParams spl_csh
 #' @param density_scale Multiplicative scale applied to event densities before taking logs.
 #'   Use this only if you intentionally want to re-express densities on another time scale.
 #'   For exact replication of manuscript PBC/Melanoma analyses (time in days), keep

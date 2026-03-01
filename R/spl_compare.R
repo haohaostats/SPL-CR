@@ -5,9 +5,9 @@
 #'
 #' @param models Named list of formulas.
 #' @param data A data.frame with time and status columns.
-#' @param method Either \code{"cr"} or \code{"fg"}.
+#' @param method Either \code{"csh"} or \code{"fg"}.
 #' @param kernels Character vector of kernels.
-#' @param ... Passed to \code{spl_cr()} or \code{spl_fg()}.
+#' @param ... Passed to \code{spl_csh()} or \code{spl_fg()}.
 #'
 #' @return A data.frame with columns: model, kernel, Lhat, se_L.
 #' @export
@@ -39,7 +39,7 @@ spl_compare <- function(models,
     form <- models[[mname]]
     for (k in kernels) {
       if (method == "cr") {
-        out <- do.call(spl_cr, c(list(formula = form, data = data, kernel = k, fold_id = fold_id), dots))
+        out <- do.call(spl_csh, c(list(formula = form, data = data, kernel = k, fold_id = fold_id), dots))
       } else {
         out <- do.call(spl_fg, c(list(formula = form, data = data, kernel = k, fold_id = fold_id), dots))
       }
