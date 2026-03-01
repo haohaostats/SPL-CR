@@ -88,7 +88,7 @@ Core dependencies include:
 ## 🚀 Quick start (PBC example)
 
 This example utilizes the **Mayo Clinic Primary Biliary Cirrhosis (PBC)**. The dataset is accessed via the `survival` R package. 
-In the PBC cohort, we treated death and liver transplantation as the two competing causes. We recoded outcomes as $\delta=0$ for censoring, $\delta=1$ for death, and $\delta=2$ for transplantation
+In the PBC cohort, we treated death and liver transplantation as the two competing causes. We recoded outcomes as $\delta=0$ for censoring, $\delta=1$ for death, and $\delta=2$ for transplantation.
 
 ```r
 library(splcr)
