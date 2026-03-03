@@ -23,7 +23,7 @@ It implements two cross-validated smoothed predictive likelihood scores:
 - **SPL-CSH**: for **cause-specific hazards (CSH)** models (Cox-type per cause)
 - **SPL-FG**: for **Fine–Gray (FG)** subdistribution hazard models
 
-The package addresses a key technical issue in survival/competing-risks validation:
+The package addresses a key technical issue in survival competing-risks validation:
 
 > Standard Cox / Fine–Gray baseline estimators are step functions.  
 > For out-of-sample events occurring between training jump times, naive predictive densities can be zero, causing `log(0)` failures in cross-validation.
