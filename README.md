@@ -1,94 +1,80 @@
 # SPL-CR <img src="https://img.shields.io/badge/R-package-276DC3?logo=r&logoColor=white" alt="R package" align="right"/>
 
 <p align="center">
-  <b>Smoothed Predictive Likelihood for Competing Risks</b><br>
-  <i>Likelihood-based validation for cause-specific and Fine–Gray prediction models</i>
+  <img src="https://img.shields.io/badge/Competing%20Risks-Likelihood%20Validation-0f4c5c?style=for-the-badge" alt="Competing Risks Validation">
+  <img src="https://img.shields.io/badge/SPL--CSH%20%7C%20SPL--FG-Methodology-c6903d?style=for-the-badge" alt="Methods">
 </p>
 
 <p align="center">
-  <a href="https://github.com/haohaostats/SPL-CR"><img src="https://img.shields.io/badge/GitHub-haohaostats%2FSPL--CR-black?logo=github" alt="GitHub repo"></a>
+  <b>Smoothed Predictive Likelihood for Competing Risks</b><br>
+  <i>Estimand-aware cross-validated validation for cause-specific and Fine-Gray prediction models</i>
+</p>
+
+<p align="center">
+  <a href="https://github.com/haohaostats/SPL-CR"><img src="https://img.shields.io/badge/GitHub-Repository-black?logo=github" alt="GitHub repo"></a>
+  <a href="https://haostats.shinyapps.io/splcr-web/"><img src="https://img.shields.io/badge/Web-App%20Live-0f766e?logo=shiny&logoColor=white" alt="Web app"></a>
   <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-4caf50" alt="platform">
   <img src="https://img.shields.io/badge/status-active%20development-0a7ea4" alt="status">
-  <img src="https://img.shields.io/badge/methods-SPL--CR%20%7C%20SPL--FG-7b1fa2" alt="methods">
 </p>
 
 ---
 
-## ✨ Overview
+## Why SPL-CR
 
-`SPL-CR` provides **likelihood-based, estimand-aware validation tools for competing-risks prediction models**.
+A core challenge in competing-risks validation is that baseline estimators from Cox and Fine-Gray models are step functions.
+Out-of-sample event times falling between training jump points can yield zero predictive densities and unstable `log(0)` terms.
 
-It implements two cross-validated smoothed predictive likelihood scores:
-
-- **SPL-CSH**: for **cause-specific hazards (CSH)** models (Cox-type per cause)
-- **SPL-FG**: for **Fine–Gray (FG)** subdistribution hazard models
-
-The package addresses a key technical issue in survival/competing-risks validation:
-
-> Standard Cox / Fine–Gray baseline estimators are step functions.  
-> For out-of-sample events occurring between training jump times, naive predictive densities can be zero, causing `log(0)` failures in cross-validation.
-
-`SPL-CR` resolves this by applying a **post-fit k-nearest-neighbour kernel smoother** to training-fold baseline components only, yielding finite and stable out-of-sample log-scores.
+`SPL-CR` resolves this through post-fit k-nearest-neighbour smoothing of training-fold baseline components only, yielding finite and stable predictive log-scores while preserving estimand alignment.
 
 ---
 
-## 🔬 Methods implemented
+## Methods Implemented
 
-### 1) SPL-CSH (Cause-Specific Hazards path)
-- Fit one Cox model per cause on each training fold
-- Smooth baseline cumulative hazard jumps \( \Delta \widehat{\Lambda}_{0c}(t) \)
-- Evaluate out-of-fold predictive log-score under the cause-specific hazards representation
+### SPL-CSH
 
-### 2) SPL-FG (Fine–Gray path)
-- Fit one Fine–Gray model per cause on each training fold
-- Extract baseline CIF jumps from `predictRisk()` on a reference covariate profile
-- Smooth baseline CIF and induced density
-- Evaluate out-of-fold predictive log-score under the Fine–Gray representation
+- One Cox model per cause in each training fold
+- Smoothing of baseline cumulative hazard jumps \(\Delta \widehat{\Lambda}_{0c}(t)\)
+- Out-of-fold predictive log-score under the cause-specific hazards representation
+
+### SPL-FG
+
+- One Fine-Gray model per cause in each training fold
+- Baseline CIF jump extraction via `predictRisk()` on a reference profile
+- Smoothing of baseline CIF and induced event density
+- Out-of-fold predictive log-score under the Fine-Gray representation
 
 ### Shared smoothing engine
-- **k-NN adaptive bandwidth**
-- **Boundary renormalization**
-- Kernels:
-  - Uniform
-  - Triangular
-  - Epanechnikov
-  - Quartic (Biweight)
+
+- k-NN adaptive bandwidth
+- boundary renormalization
+- supported kernels: `uniform`, `triangular`, `epanechnikov`, `quartic`
 
 ---
 
-## 📦 Installation
+## Clinical-Research Oriented Access
 
-### From GitHub (recommended)
+`SPL-CR` now supports two parallel workflows:
+
+- **Interactive Web App (recommended for applied users):** run analyses in a browser with guided inputs, status-label mapping, and formatted result tables.
+- **R Package (recommended for methodological users):** fully scriptable workflows for reproducible analysis, simulation, and manuscript pipelines.
+
+**Web app:** [https://haostats.shinyapps.io/splcr-web/](https://haostats.shinyapps.io/splcr-web/)
+
+![SPL-CR Web App Screenshot](https://image.thum.io/get/width/1400/https://haostats.shinyapps.io/splcr-web/)
+
+---
+
+## Installation (R Package)
 
 ```r
 # install.packages("remotes")
 remotes::install_github("haohaostats/SPL-CR")
-```
-
-Then load:
-
-```r
 library(splcr)
 ```
 
 ---
 
-## 🧰 Dependencies
-
-Core dependencies include:
-
-- `survival`
-- `riskRegression`
-- `prodlim`
-- `Rcpp`
-- `RcppArmadillo`
-
----
-
-## 🚀 Quick start (PBC example)
-
-This example utilizes the **Mayo Clinic Primary Biliary Cirrhosis (PBC)**. The dataset is accessed via the `survival` R package. 
-In the PBC cohort, we treated death and liver transplantation as the two competing causes. We recoded outcomes as $\delta=0$ for censoring, $\delta=1$ for death, and $\delta=2$ for transplantation
+## Quick Start (PBC)
 
 ```r
 library(splcr)
@@ -96,11 +82,10 @@ library(survival)
 
 data(pbc, package = "survival")
 
-# PBC preprocessing (competing risks: 1=death, 2=transplant, 0=censoring)
 pbc_data <- subset(pbc, !is.na(trt))
 pbc_data$status <- ifelse(pbc_data$status == 2, 1L,
                           ifelse(pbc_data$status == 1, 2L, 0L))
-pbc_data$time <- as.numeric(pbc_data$time)  # use original unit (days)
+pbc_data$time <- as.numeric(pbc_data$time)
 pbc_data$logbili <- log(pbc_data$bili)
 pbc_data$sex <- factor(pbc_data$sex)
 pbc_data$stage <- factor(pbc_data$stage)
@@ -110,7 +95,6 @@ pbc_data <- pbc_data[complete.cases(
   pbc_data[, c("time","status","logbili","albumin","protime","ascites","age","sex","stage")]
 ), ]
 
-# SPL-CSH
 res_csh <- spl_csh(
   ~ logbili + albumin + protime + ascites,
   data   = pbc_data,
@@ -119,9 +103,7 @@ res_csh <- spl_csh(
   kernel = "epanechnikov",
   seed   = 20250101
 )
-print(res_csh)
 
-# SPL-FG
 res_fg <- spl_fg(
   ~ logbili + albumin + protime + ascites,
   data   = pbc_data,
@@ -130,10 +112,16 @@ res_fg <- spl_fg(
   kernel = "epanechnikov",
   seed   = 20250101
 )
+
+print(res_csh)
 print(res_fg)
 ```
 
-**Example output (PBC cohort):**
+---
+
+## Results Snapshot
+
+### Single-model validation output
 
 ```text
 Smoothed Predictive Likelihood (SPL-CSH)
@@ -149,11 +137,7 @@ Jackknife SE: 0.0389
 95% CI: [-3.8270, -3.6512]
 ```
 
----
-
-## 📊 Compare multiple model specifications
-
-Use `spl_compare()` to compare candidate formulas across kernels under a shared fold assignment.
+### Multi-model comparison (5 models x 4 kernels)
 
 ```r
 models <- list(
@@ -164,7 +148,6 @@ models <- list(
   "M5: Full"                 = ~ age + sex + stage + logbili + albumin + protime + ascites
 )
 
-# Compare under SPL-CSH
 tab_csh <- spl_compare(
   models  = models,
   data    = pbc_data,
@@ -175,7 +158,6 @@ tab_csh <- spl_compare(
   seed    = 20250101
 )
 
-# Compare under SPL-FG
 tab_fg <- spl_compare(
   models  = models,
   data    = pbc_data,
@@ -186,90 +168,101 @@ tab_fg <- spl_compare(
   seed    = 20250101
 )
 
-# Convert to manuscript-style wide tables (kernels as columns)
-tab_csh_wide <- spl_compare_wide(tab_csh)
-tab_fg_wide <- spl_compare_wide(tab_fg)
-
-# Pretty print
-print(tab_csh_wide)
-print(tab_fg_wide)
+print(spl_compare_wide(tab_csh))
+print(spl_compare_wide(tab_fg))
 ```
 
-**Example output (wide tables, `metric = Lhat`):**
-
 ```text
-📊 SPL-CSH model comparison  •  metric = Lhat
-────────────────────────────────────────────────────────────────────────────
+SPL-CSH model comparison (metric = Lhat)
 Model                        Uniform   Triangular   Epanechnikov     Quartic
-────────────────────────────────────────────────────────────────────────────
 M1: Baseline Clinical        -4.6304      -4.6792        -4.6735     -4.6807
-M2: Core Biochemical       ★ -2.6720    ★ -2.7210      ★ -2.7155   ★ -2.7222
+M2: Core Biochemical      *  -2.6720   *  -2.7210     *  -2.7155  *  -2.7222
 M3: Extended Biochemical     -3.9374      -3.9865        -3.9810     -3.9876
 M4: Clinical + Core Bio      -3.1065      -3.1565        -3.1511     -3.1579
 M5: Full                     -4.0118      -4.0620        -4.0568     -4.0634
-────────────────────────────────────────────────────────────────────────────
-Note: ★ marks the highest value in each kernel column (larger is better).
 
-📊 SPL-FG model comparison  •  metric = Lhat
-────────────────────────────────────────────────────────────────────────────
+SPL-FG model comparison (metric = Lhat)
 Model                        Uniform   Triangular   Epanechnikov     Quartic
-────────────────────────────────────────────────────────────────────────────
 M1: Baseline Clinical        -4.1256      -4.1721        -4.1677     -4.1732
 M2: Core Biochemical         -4.3483      -4.4351        -4.4223     -4.4452
-M3: Extended Biochemical   ★ -3.6968    ★ -3.7459      ★ -3.7391   ★ -3.7545
+M3: Extended Biochemical  *  -3.6968   *  -3.7459     *  -3.7391  *  -3.7545
 M4: Clinical + Core Bio      -3.8935      -3.9405        -3.9358     -3.9421
 M5: Full                     -4.1578      -4.2067        -4.1996     -4.2121
-────────────────────────────────────────────────────────────────────────────
-Note: ★ marks the highest value in each kernel column (larger is better).
+
+* marks the highest value in each kernel column (larger is better).
 ```
 
 ---
 
-## ⚠️ Important notes (time unit & comparability)
+## Interpretation Notes
 
-### Time unit is **user-defined** (days / years / months all allowed)
-Both `spl_csh()` and `spl_fg()` are **time-unit agnostic**.
+### Time unit comparability
 
-However:
+Both `spl_csh()` and `spl_fg()` are time-unit agnostic.
+You may use days, months, or years.
 
-- Absolute log-score values **depend on the time unit**
-- For fair model comparison, **all models must use the same time unit**
-- The manuscript real-data examples (e.g., PBC / melanoma) use **time in days**
+For valid model comparison:
 
-### Fine–Gray implementation note (manuscript-consistent behavior)
-The package implementation of `spl_fg()` uses a **common all-cause event-time grid within each training fold** when extracting baseline CIF jumps, matching the manuscript reference scripts.
+- keep a consistent time unit across all models;
+- note that absolute log-score values depend on the chosen unit;
+- manuscript real-data examples use **time in days**.
+
+### Fine-Gray implementation detail
+
+`spl_fg()` uses a common all-cause event-time grid within each training fold when extracting baseline CIF jumps, matching the manuscript reference implementation.
 
 ---
 
-## 📁 Repository structure
+## Repository Structure
 
 ```text
 .
-├── DESCRIPTION
-├── NAMESPACE
-├── R/
-│   ├── spl_csh.R
-│   ├── spl_fg.R
-│   ├── spl_compare.R
-│   ├── spl_compare_wide.R
-│   ├── utils.R
-│   └── ...
-├── src/
-│   └── khs.cpp
-├── man/
-├── README.md
-└── ...
+|-- DESCRIPTION
+|-- NAMESPACE
+|-- R/
+|   |-- spl_csh.R
+|   |-- spl_fg.R
+|   |-- spl_compare.R
+|   |-- spl_compare_wide.R
+|   |-- web-app.R
+|   `-- ...
+|-- src/
+|   `-- khs.cpp
+|-- man/
+|-- vignettes/
+|-- app.R
+`-- README.md
 ```
 
 ---
 
-## 📬 Contact
+## Dependencies
 
-- **Hao Chen** — University of Sydney  
-- GitHub: <https://github.com/haohaostats>
+Core computational dependencies:
+
+- `survival`
+- `riskRegression`
+- `prodlim`
+- `Rcpp`
+- `RcppArmadillo`
+
+Interface and deployment dependencies:
+
+- `shiny`
+- `rsconnect`
+
+---
+
+## Contact
+
+- **Hao Chen** - University of Sydney
+- GitHub: [https://github.com/haohaostats](https://github.com/haohaostats)
 
 ---
 
 <p align="center">
-  <i>If this package is useful in your work, a ⭐ on the repository helps visibility and reproducibility.</i>
+  <i>If this repository contributes to your work, a star helps visibility and reproducibility.</i>
 </p>
+
+
+
