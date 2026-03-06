@@ -224,13 +224,11 @@ For valid model comparison:
 |   |-- spl_fg.R
 |   |-- spl_compare.R
 |   |-- spl_compare_wide.R
-|   |-- web-app.R
 |   `-- ...
 |-- src/
 |   `-- khs.cpp
 |-- man/
 |-- vignettes/
-|-- app.R
 `-- README.md
 ```
 
