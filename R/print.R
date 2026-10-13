@@ -29,6 +29,5 @@ print.splcr_result <- function(x, digits = 4, ...) {
           ", ", format(round(hi, digits), nsmall = digits), "]\n", sep = "")
     }
   }
-  if (length(x$fit_warnings)) cat(paste(x$fit_warnings, collapse = "\n"), "\n")
   invisible(x)
 }

@@ -498,11 +498,7 @@ run_splcr_app <- function(...) {
     })
 
     output$single_summary_ui <- shiny::renderUI({
-      res <- single_result()
-      shiny::tagList(
-        if (length(res$fit_warnings)) shiny::div(class = "alert alert-warning", "Cox fitting warnings were recorded; inspect model convergence before interpreting the score."),
-        shiny::div(class = "table-wrap", .splcr_table_html(.splcr_result_summary(res), digits = 4L))
-      )
+      shiny::div(class = "table-wrap", .splcr_table_html(.splcr_result_summary(single_result()), digits = 4L))
     })
 
     output$single_print <- shiny::renderPrint({

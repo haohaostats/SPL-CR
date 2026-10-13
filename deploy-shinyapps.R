@@ -4,6 +4,7 @@ if (!requireNamespace("rsconnect", quietly = TRUE)) {
 
 rsconnect::deployApp(
   appDir = ".",
+  appFiles = "app.R",
   appPrimaryDoc = "app.R",
   appName = "splcr-web",
   account = "haostats"
