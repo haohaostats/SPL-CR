@@ -1,0 +1,7 @@
+src/*.o
+src/*.dll
+src/*.so
+rsconnect/
+.RData
+.Rhistory
+README.html
