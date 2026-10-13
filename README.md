@@ -126,9 +126,9 @@ print(res_fg)
 ```text
 Smoothed Predictive Likelihood (SPL-CSH)
 Kernel: epanechnikov  kNN: 5  folds: 10
-CV mean log-score (Lhat): -3.9810
-Jackknife SE: 0.0358
-95% CI: [-4.0619, -3.9000]
+CV mean log-score (Lhat): -4.3417
+Jackknife SE: 0.0273
+95% CI: [-4.4035, -4.2799]
 
 Smoothed Predictive Likelihood (SPL-FG)
 Kernel: epanechnikov  kNN: 5  folds: 10
@@ -175,11 +175,11 @@ print(spl_compare_wide(tab_fg))
 ```text
 SPL-CSH model comparison (metric = Lhat)
 Model                        Uniform   Triangular   Epanechnikov     Quartic
-M1: Baseline Clinical        -4.6304      -4.6792        -4.6735     -4.6807
-M2: Core Biochemical      *  -2.6720   *  -2.7210     *  -2.7155  *  -2.7222
-M3: Extended Biochemical     -3.9374      -3.9865        -3.9810     -3.9876
-M4: Clinical + Core Bio      -3.1065      -3.1565        -3.1511     -3.1579
-M5: Full                     -4.0118      -4.0620        -4.0568     -4.0634
+M1: Baseline Clinical        -4.5563      -4.5569        -4.5560     -4.5571
+M2: Core Biochemical         -4.3626      -4.3631        -4.3623     -4.3632
+M3: Extended Biochemical  *  -4.3418   *  -4.3426     *  -4.3417  *  -4.3427
+M4: Clinical + Core Bio      -4.3755      -4.3761        -4.3754     -4.3763
+M5: Full                     -4.3747      -4.3756        -4.3748     -4.3757
 
 SPL-FG model comparison (metric = Lhat)
 Model                        Uniform   Triangular   Epanechnikov     Quartic
