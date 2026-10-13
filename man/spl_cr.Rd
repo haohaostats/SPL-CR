@@ -12,7 +12,7 @@ spl_csh(
   causes = NULL,
   folds = 10L,
   k_nn = 5L,
-  kernel = "epanechnikov",
+  kernel = "uniform",
   seed = NULL,
   stratify = TRUE,
   fold_id = NULL,
@@ -59,8 +59,8 @@ hazards representation by smoothing baseline cumulative hazard jumps on each
 training fold using a k-nearest-neighbour kernel smoother.
 }
 \details{
-This function is implemented to be numerically consistent with the reference
-analysis scripts used in the accompanying manuscript.
+All four kernels use local area scaling and its integrated cumulative hazard. Held-out observations beyond the training
+follow-up are censored at that training limit.
 
 Time-unit note:
 \itemize{

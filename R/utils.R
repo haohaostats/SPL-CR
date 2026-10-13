@@ -12,7 +12,7 @@
 
 .rhs_only <- function(formula) {
   if (!inherits(formula, "formula")) stop("formula must be a formula object.")
-  if (length(formula) == 2L) return(formula)          # ~ x1 + x2
+  if (length(formula) == 2L) return(formula)
   if (length(formula) == 3L) return(stats::as.formula(paste0("~", deparse(formula[[3L]]))))
   stop("Unsupported formula format.")
 }
@@ -35,7 +35,7 @@
     id <- which(st == lv)
     k <- length(id)
     if (k == 0) next
-    id_shuf <- sample(id, k)
+    id_shuf <- id[sample.int(k)]
     folds_lv <- rep(seq_len(n_fold), length.out = k)
     out[id_shuf] <- folds_lv
   }

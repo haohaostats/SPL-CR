@@ -1,4 +1,3 @@
-#' @export
 print.splcr_result <- function(x, digits = 4, ...) {
   stopifnot(is.list(x))
   method <- if (!is.null(x$method)) x$method else "spl"
@@ -18,7 +17,7 @@ print.splcr_result <- function(x, digits = 4, ...) {
   if (!is.null(x$se_L)) {
     cat("Jackknife SE: ", format(round(x$se_L, digits), nsmall = digits), "\n", sep = "")
   }
-  # Optional CI if fold_means available
+
   if (!is.null(x$fold_means)) {
     fm <- x$fold_means[is.finite(x$fold_means)]
     R <- length(fm)
@@ -30,5 +29,6 @@ print.splcr_result <- function(x, digits = 4, ...) {
           ", ", format(round(hi, digits), nsmall = digits), "]\n", sep = "")
     }
   }
+  if (length(x$fit_warnings)) cat(paste(x$fit_warnings, collapse = "\n"), "\n")
   invisible(x)
 }

@@ -1,5 +1,3 @@
-# Internal wrappers for registered C++ routines
-
 .calculate_smoothed_hazard_cpp <- function(Jumps_H0, bw, nn, t, method_id) {
   .Call(
     "_splcr_calculate_smoothed_hazard",

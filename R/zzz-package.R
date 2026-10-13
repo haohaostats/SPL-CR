@@ -1,7 +1,2 @@
-#' splcr: Smoothed Predictive Likelihood for Competing Risks
-#'
-#' Internal package metadata and native routine registration.
-#'
-#' @keywords internal
-#' @useDynLib splcr, .registration = TRUE
-"_PACKAGE"
+utils::globalVariables(c("pbc", "trt"))
+NULL

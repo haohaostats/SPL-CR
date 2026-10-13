@@ -26,7 +26,6 @@ pbc_data <- subset(pbc, !is.na(trt))
 pbc_data$status <- ifelse(pbc_data$status == 2, 1L, ifelse(pbc_data$status == 1, 2L, 0L))
 pbc_data$time <- as.numeric(pbc_data$time) / 365.25
 
-# Transformations consistent with the application code
 pbc_data$logbili <- log(pbc_data$bili)
 pbc_data$sex <- factor(pbc_data$sex)
 pbc_data$stage <- factor(pbc_data$stage)

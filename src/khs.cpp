@@ -1,4 +1,3 @@
-// [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
 #include <R_ext/Rdynload.h>
 #include <algorithm>
@@ -6,22 +5,18 @@
 
 using namespace Rcpp;
 
-// ============================================================================
-//                               Kernel family
-// ============================================================================
-
 inline double evaluate_kernel(double u, int kernel_id) {
   switch (kernel_id) {
-  case 1: // Uniform
+  case 1:
     return (std::abs(u) <= 1.0) ? 0.5 : 0.0;
-  case 2: // Triangular
+  case 2:
     return (std::abs(u) <= 1.0) ? (1.0 - std::abs(u)) : 0.0;
-  case 3: // Epanechnikov
+  case 3:
     return (std::abs(u) <= 1.0) ? (0.75 * (1.0 - u*u)) : 0.0;
-  case 4: { // Quartic (Biweight)
+  case 4: {
       if (std::abs(u) > 1.0) return 0.0;
       double t = 1.0 - u*u;
-      return 0.9375 * t * t;  // 15/16
+      return 0.9375 * t * t;
     }
   default:
     return 0.0;
@@ -62,9 +57,6 @@ inline double kernel_overlap_integral(int kernel_id, double L, double U) {
   return K_primitive(high, kernel_id) - K_primitive(low, kernel_id);
 }
 
-// ============================================================================
-//                 kNN kernel smoothing for baseline hazard jumps
-// ============================================================================
 inline double smooth_hazard_knn_bandwidth(arma::mat hazard_jumps,
                                           int n_neighbors,
                                           double time_point,
@@ -131,7 +123,6 @@ inline double smooth_hazard_knn_bandwidth(arma::mat hazard_jumps,
   return (lambda_s > 0.0) ? lambda_s : 0.0;
 }
 
-// C++ implementation used by the .Call wrapper
 static double calc_smoothed_hazard_cpp(Rcpp::NumericMatrix Jumps_H0,
                                        double bw, int nn, double t, int method_id) {
   arma::mat hazard_jumps(Jumps_H0.begin(), Jumps_H0.nrow(), Jumps_H0.ncol(), false);
@@ -142,9 +133,6 @@ static double calc_smoothed_hazard_cpp(Rcpp::NumericMatrix Jumps_H0,
   return smooth_hazard_knn_bandwidth(hazard_jumps, nn, t, method_id);
 }
 
-// ============================================================================
-//        kNN kernel smoothing for baseline step function H(t) (e.g., F0)
-// ============================================================================
 inline std::pair<double,double>
 smooth_level_and_density_knn(const arma::mat& jumps,
                              int n_neighbors,
@@ -218,9 +206,6 @@ static Rcpp::NumericVector smooth_level_density_cpp(Rcpp::NumericMatrix Jumps_H,
   return out;
 }
 
-// ---------------------------------------------------------------------------
-// .Call wrappers with registration
-// ---------------------------------------------------------------------------
 extern "C" SEXP _splcr_calculate_smoothed_hazard(SEXP Jumps_H0SEXP,
                                                  SEXP bwSEXP,
                                                  SEXP nnSEXP,

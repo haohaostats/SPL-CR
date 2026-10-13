@@ -8,7 +8,7 @@ spl_compare(
   models,
   data,
   method = c("csh", "fg"),
-  kernels = c("uniform", "triangular", "epanechnikov", "quartic"),
+  kernels = NULL,
   ...
 )
 }

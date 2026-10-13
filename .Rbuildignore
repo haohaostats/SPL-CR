@@ -1,0 +1,7 @@
+^\.git$
+^\.RData$
+^\.Rhistory$
+^rsconnect$
+^app\.R$
+^deploy-shinyapps\.R$
+^README\.html$

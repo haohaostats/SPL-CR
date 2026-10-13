@@ -1,7 +1,7 @@
 Package: splcr
 Type: Package
 Title: Smoothed Predictive Likelihood for Competing Risks
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: c(
     person("Hao", "Chen", role = c("aut", "cre"),
            email = "hao.chen@sydney.edu.au"),
@@ -24,6 +24,7 @@ Imports:
     prodlim,
     Rcpp
 Suggests:
+    shiny,
     knitr,
     rmarkdown
 LinkingTo:
